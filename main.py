@@ -26,10 +26,16 @@ app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
 
 # CREATE DB
-
+# configure the SQLite database, relative to the app instance folder
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///movies-collection.db"
+# initialize the app with the extension
+db.init_app(app)
 
 # CREATE TABLE
+class Base(DeclarativeBase):
+    pass
 
+class Movies(Base):
 
 @app.route("/")
 def home():
