@@ -75,10 +75,10 @@ with app.app_context():
 @app.route("/")
 def home():
     with app.app_context():
-        all_movies = db.session.scalars(db.select(Movies).all())
+        all_movies = db.session.scalars(db.select(Movies)).all()
     print([movie.rating for movie in all_movies])
     return render_template("index.html", all_movies=all_movies)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
