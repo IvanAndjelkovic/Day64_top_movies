@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Float
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms import StringField, FloatField, SubmitField
+from wtforms.validators import DataRequired, NumberRange
 import requests
 
 '''
@@ -25,6 +25,10 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
 
+class MyForm(FlaskForm):
+    movie_title = StringField(label='Movie Title', validators=[DataRequired(message='movie title is required.')])
+    rating = FloatField(label='Edit Movie Rating', validators=[DataRequired(), NumberRange(min=0, max=10)])
+    submit = SubmitField(label='Done')
 
 
 # CREATE DB
@@ -81,7 +85,9 @@ def home():
 
 @app.route("/edit/<int:movie_id>", methods=["GET","POST"])
 def edit(movie_id):
-    return render_template("edit.html", movie_id=movie_id)
+    form=MyForm()
+    
+    return render_template("edit.html", movie_id=movie_id, form=form)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
