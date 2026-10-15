@@ -47,7 +47,7 @@ class Movies(db.Model):
     rating: Mapped[float] = mapped_column (Float, nullable = True)
     ranking: Mapped[int] = mapped_column (Integer, nullable = True)
     review: Mapped[str] = mapped_column (String(250), nullable = True)
-    img_url: Mapped[str] = mapped_column (String(250), nullable = True)
+    img_url: Mapped[str] = mapped_column (String(250), nullable = False)
 
     # Optional: this will allow each book object to be identified by its title when printed.
     def __repr__(self):
@@ -75,7 +75,7 @@ with app.app_context():
 @app.route("/")
 def home():
     with app.app_context():
-        all_movies = db.session.scalars(db.select(Movies).order_by(Movies.rating .desc())).all()
+        all_movies = db.session.scalars(db.select(Movies).all())
     print([movie.rating for movie in all_movies])
     return render_template("index.html", all_movies=all_movies)
 
