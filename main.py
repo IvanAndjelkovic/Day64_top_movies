@@ -95,7 +95,7 @@ def edit(movie_id):
         return redirect(url_for('home'))
 
     
-    return render_template("edit.html", movie_id=movie_id, form=form)
+    return render_template("edit.html", movie=movie, movie_id=movie_id, form=form)
 
 if __name__ == '__main__':
     app.run(debug=True)
