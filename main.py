@@ -26,8 +26,9 @@ app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
 
 class MyForm(FlaskForm):
-    movie_title = StringField(label='Movie Title', validators=[DataRequired(message='movie title is required.')])
-    rating = FloatField(label='Edit Movie Rating', validators=[DataRequired(), NumberRange(min=0, max=10)])
+    
+    rating = FloatField(label='Your new Rating from 0 to 10, eg. 7.5', validators=[DataRequired(), NumberRange(min=0, max=10)])
+    movie_review = StringField(label='Your Review', validators=[DataRequired(message='movie review is required.')])
     submit = SubmitField(label='Done')
 
 
@@ -86,8 +87,15 @@ def home():
 @app.route("/edit/<int:movie_id>", methods=["GET","POST"])
 def edit(movie_id):
     form=MyForm()
+    movie=db.session.get(Movies, movie_id)
+    if form.validate_on_submit() and request.method=="POST":
+        movie.rating=float(request.form["rating"])
+        movie.review=str(request.form["movie_review"])
+        db.session.commit() 
+        return redirect(url_for('home'))
+
     
     return render_template("edit.html", movie_id=movie_id, form=form)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
