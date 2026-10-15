@@ -79,6 +79,9 @@ def home():
     print([movie.rating for movie in all_movies])
     return render_template("index.html", all_movies=all_movies)
 
+@app.route("/edit/<int:movie_id>", methods=["GET","POST"])
+def edit(movie_id):
+    return render_template("edit.html", movie_id=movie_id)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
