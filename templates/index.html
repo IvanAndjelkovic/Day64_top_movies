@@ -19,7 +19,7 @@
     <div class="title">{{ movie.title }}<span class="release_date">{{ movie.year}}</span></div>
         <div class="rating">
             <label>{{ movie.rating }}</label>
-          <i class="fas fa-star star"></i>
+          <i class="fas fa-star  star"></i>
         </div>
           <p class="review">{{ movie.review }}</p>
         <p class="overview">
@@ -38,7 +38,7 @@
   {% else %}
     <p>No movies found.</p>
   {% endif %}
-<a href="#" class="button">Add Movie</a>
+<a href="{{ url_for('add')}}" class="button">Add Movie</a>
 
 </div>
 
