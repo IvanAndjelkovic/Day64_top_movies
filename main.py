@@ -104,7 +104,7 @@ def delete(movie_id):
     db.session.commit()
     return redirect(url_for('home'))
 
-@app.route("/add")
+@app.route("/add", methods=["GET","POST"])
 def add():
     return render_template("add.html")
 
