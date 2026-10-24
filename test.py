@@ -21,5 +21,7 @@ params={
 }
 
 response = requests.get(url, headers=headers, params=params)
+print(response.json())
 
-print(response.text)
+# for movie in response:
+#     print (response.json())
