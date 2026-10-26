@@ -4,9 +4,10 @@ import requests
 load_dotenv()
 
 
+
 api_key = os.environ.get("API_KEY")
-print(api_key)
-print("mile")
+
+
 
 url = "https://api.themoviedb.org/3/search/movie"
 
@@ -21,7 +22,7 @@ params={
 }
 
 response = requests.get(url, headers=headers, params=params)
-print(response.json())
 
-# for movie in response:
-#     print (response.json())
+data=response.json()
+
+print(data)
