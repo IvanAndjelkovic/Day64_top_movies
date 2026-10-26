@@ -25,4 +25,6 @@ response = requests.get(url, headers=headers, params=params)
 
 data=response.json()
 
-print(data)
+movie_data=data["results"]
+for movie in movie_data:
+    print(movie["title"])
