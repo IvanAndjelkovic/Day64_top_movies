@@ -25,6 +25,7 @@ response = requests.get(url, headers=headers, params=params)
 
 data=response.json()
 
+
 movie_data=data["results"]
 for movie in movie_data:
-    print(movie["title"])
+    print(f"{movie["title"]} - {movie["release_date"]}")
