@@ -158,6 +158,7 @@ def movie_details(movie_id):
     db_title = data["title"]
     db_img_url = f'https://image.tmdb.org/t/p/w500/{data["poster_path"]}'
     db_year=2025
+    movie_id=int(data["id"]),
     db_description = data["overview"]
     print(db_title)
     with app.app_context():
@@ -173,7 +174,7 @@ def movie_details(movie_id):
         )
         db.session.add(new_movie)
         db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('edit', movie_id=data["id"]))
 
     
 
