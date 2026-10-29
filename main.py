@@ -7,6 +7,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, FloatField, SubmitField
 from wtforms.validators import DataRequired, NumberRange
 import requests
+import os
+from dotenv import load_dotenv
+
+
+
 
 '''
 Red underlines? Install the required packages first: 
@@ -24,6 +29,13 @@ This will install the packages from requirements.txt for this project.
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap5(app)
+
+#Movie API data data:
+
+load_dotenv()
+api_key = os.environ.get("API_KEY")
+url = "https://api.themoviedb.org/3/search/movie"
+headers = {"accept": "application/json"}
 
 class MyForm(FlaskForm):
     
@@ -106,7 +118,72 @@ def delete(movie_id):
 
 @app.route("/add", methods=["GET","POST"])
 def add():
+
+
+
     return render_template("add.html")
+
+@app.route("/select", methods=["GET","POST"])
+def select():
+    
+    if request.method=="POST":
+        movie_title=request.form.get("movie_title")
+        print(movie_title)
+        params={
+                "api_key": api_key, 
+                "query":movie_title,
+                "include_adult": False,
+                "language": "en-US",
+                "page":1
+                }
+        response = requests.get(url, headers=headers, params=params)
+        
+        data=response.json()
+        movies_data=data["results"]
+        return render_template("select.html", movies_data=movies_data)
+    return render_template("select.html",movies_date=None)
+
+@app.route("/movie_details/<movie_id>", methods=["GET"])
+def movie_details(movie_id):
+
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?language=en-US"
+    api_token= os.environ.get("API_TOKEN")
+    headers = {
+                    "accept": "application/json",
+                    "Authorization": f"Bearer {api_token}"
+                }
+    response = requests.get(url, headers=headers)
+
+    data=response.json()
+    db_title = data["title"]
+    db_img_url = f'https://image.tmdb.org/t/p/w500/{data["poster_path"]}'
+    db_year=2025
+    db_description = data["overview"]
+    print(db_title)
+    with app.app_context():
+        new_movie = Movies(
+            id=data["id"],
+            title=data["title"],
+            year=data["release_date"][0:4],
+            description=data["overview"],
+            # rating=7.3,
+            # ranking=9,
+            # review="I liked the water.",
+            img_url=f'https://image.tmdb.org/t/p/w500/{data["poster_path"]}'
+        )
+        db.session.add(new_movie)
+        db.session.commit()
+    return redirect(url_for('home'))
+
+    
+
+
+
+
+
+
+
+
 
 
 if __name__ == '__main__':

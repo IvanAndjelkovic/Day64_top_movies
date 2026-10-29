@@ -28,4 +28,4 @@ data=response.json()
 
 movie_data=data["results"]
 for movie in movie_data:
-    print(f"{movie["title"]} - {movie["release_date"]}")
+    print(f"{movie["title"]} - {movie["release_date"]} - {movie["id"]}")
