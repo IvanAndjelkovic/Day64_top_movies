@@ -43,6 +43,10 @@ class MyForm(FlaskForm):
     movie_review = StringField(label='Your Review', validators=[DataRequired(message='movie review is required.')])
     submit = SubmitField(label='Done')
 
+class AddForm(FlaskForm):
+    movie_title=StringField("Movie Title", validators=[DataRequired()])
+    submit=SubmitField("Add Movie")
+
 
 # CREATE DB
 class Base(DeclarativeBase):
@@ -116,15 +120,10 @@ def delete(movie_id):
     db.session.commit()
     return redirect(url_for('home'))
 
+
 @app.route("/add", methods=["GET","POST"])
 def add():
-
-
-
-    return render_template("add.html")
-
-@app.route("/select", methods=["GET","POST"])
-def select():
+    form=AddForm()
     
     if request.method=="POST":
         movie_title=request.form.get("movie_title")
@@ -141,7 +140,7 @@ def select():
         data=response.json()
         movies_data=data["results"]
         return render_template("select.html", movies_data=movies_data)
-    return render_template("select.html",movies_date=None)
+    return render_template("add.html",form=form)
 
 @app.route("/movie_details/<movie_id>", methods=["GET"])
 def movie_details(movie_id):
