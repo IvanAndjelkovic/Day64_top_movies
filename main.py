@@ -91,8 +91,8 @@ with app.app_context():
 
 @app.route("/")
 def home():
-    with app.app_context():
-        all_movies = db.session.scalars(db.select(Movies)).all()
+
+    all_movies = db.session.scalars(db.select(Movies).order_by(Movies.rating.desc())).all()
     print([movie.rating for movie in all_movies])
     return render_template("index.html", all_movies=all_movies)
 
